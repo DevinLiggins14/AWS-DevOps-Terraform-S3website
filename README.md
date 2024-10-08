@@ -19,33 +19,19 @@ Bash, Amazon S3, VSCode, Terraform (Optional: AWS Cli)
 <br/>
 <p align="center">
 
- ##  Step 1: 
+ ##  Step 1: Create an S3 Bucket
 
 ### **Prerequisites**  
 - Have an [AWS account](https://aws.amazon.com/console/).   
 - Install [terraform](https://developer.hashicorp.com/terraform/install).
 
-```bash
-# Create a resource group
-az group create --name aks-demo-rg --location eastus
 
-# Create the AKS cluster
-az aks create --resource-group aks-demo-rg --name aks-demo --location eastus2 --node-count 2 --enable-managed-identity --generate-ssh-keys
-```
+## Step 2: Configure the Bucket for Static Website Hosting
 
-<img src="https://github.com/user-attachments/assets/ac86358c-104c-48b6-a506-a0d3658833bf"/>
-<img src="https://github.com/user-attachments/assets/2724b032-6e8a-45b1-ad2d-5554ba06f801"/>
+## Step 3: Upload Website Files
 
-### **Connect to AKS Cluster**  
-```bash
-# Login to your azure account
-az login
-# Set the cluster subscription
-az account set --subscription Enter subscription Here
-# Download cluster credentials
-az aks get-credentials --resource-group aks-demo-rg --name aks-demo --overwrite-existing
+## Step 4: Enable Public Access
 
-```
-<img src="https://github.com/user-attachments/assets/3c3af067-95d3-458f-a90e-e046da1dcdac"/>
+## Step 5: COnfigure DNS (Optional)
 
-<br/>  Make sure clock is syncronized if error encountered and confirm <br/>
+
