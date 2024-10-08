@@ -8,23 +8,22 @@
 
 <h2>Languages and Utilities Used</h2>
 
-Bash, Az-cli, Kubectl, VSCode, Helm (Optional: cloudshell)
+Bash, Amazon S3, VSCode, Terraform (Optional: AWS Cli)
 
 <h2>Environments Used </h2>
 
 - <b>CentOS Linux release 8.5.2111
- 10, Azure portal </b>
+ 10, AWS portal </b>
 
 <h2>Project walk-through:</h2>
 <br/>
 <p align="center">
 
- ##  Step 1: Create AKS Cluster
+ ##  Step 1: 
 
 ### **Prerequisites**  
-- Download and Install [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).  
-- Setup and configure Azure CLI using the `az login` command.  
-- Install and configure `kubectl` as mentioned [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+- Have an [AWS account](https://aws.amazon.com/console/).   
+- Install [terraform](https://developer.hashicorp.com/terraform/install).
 
 ```bash
 # Create a resource group
