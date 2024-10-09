@@ -67,27 +67,48 @@ aws configure
 aws sts get-caller-identity
 ```
 
-<br/> Make sure to fill in the credentials with the IAM user Access Key and Secret Access Keys. These can be found in the AWS portal <br/>
+<br/> Make sure to fill in the credentials with the IAM user Access Key and Secret Access Keys. These can be found in the AWS IAM service for a user <br/>
 <img src="https://github.com/user-attachments/assets/03525b0f-63db-4fd9-a8ad-4fdbcedfc453"/>
 <img src="https://github.com/user-attachments/assets/3d1d680f-aa50-4ac9-9f41-2e102082fe11"/>
 
-<br/> create the S3 bucket. Note: the  name must be unique across AWS  <br/>
-
+<br/> Note: to create the name must be unique across AWS  <br/>
 <br/> More info on using Terraform to create an S3 bucket can be found at https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket <br/>
 
-### However In order to configure the main.tf we must define a variable
+### However first define a variable, create the main.tf, and create our S3 bucket
 
 ```Bash
-# Create variables.tf to define a variable for the main.tf file that will create our S3 bucket
-vi 
+# Define the variable 
+cat <<EOF > variables.tf
+variable "bucketname" {
+  default = "myterraformstaticweb"
+}
+EOF
+
+# Create the main.tf with the variable
+cat <<EOF > main.tf
+# Create S3 bucket
+resource "aws_s3_bucket" "mybucket" {
+  bucket = var.bucketname
+}
+EOF
+
+# Create the S3 bucket
+terraform plan
+terraform apply
 
 ```
 
-<img src=""/>
-<img src=""/>
-<img src=""/>
+<img src="https://github.com/user-attachments/assets/319c58f0-ccbd-43f4-a005-01324d213587"/>
+<img src="https://github.com/user-attachments/assets/f4ca7509-f755-4f29-bf63-068e39c82d80"/>
+<img src="https://github.com/user-attachments/assets/0aa175f5-0098-42e9-a9f8-df1e7e608ab5"/>
+<br/> Confirm the bucket has been created in the console as well: <br/>
+<img src ="https://github.com/user-attachments/assets/d6b44cd9-60f7-45d3-9195-c94faa028787"/>
+
 
 ## Step 2: Configure the Bucket for Static Website Hosting
+
+<br/> Navigate to [s3_bucket_ownership_controls](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) to find the following: <br/>
+
 
 ## Step 3: Upload Website Files
 
