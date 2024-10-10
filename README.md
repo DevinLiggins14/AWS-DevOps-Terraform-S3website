@@ -664,11 +664,7 @@ terraform apply -auto-approve
 
 ```
 
-<img src=""/>
-<img src=""/>
-<img src=""/>
-<img src=""/>
-<img src=""/>
-<img src=""/>
-<img src=""/>
-<img src=""/>
+<img src="https://github.com/user-attachments/assets/fe2b91fa-f4ad-4ff0-837b-316c290dbb2f"/>
+<img src="https://github.com/user-attachments/assets/a43e5e0b-0316-4184-8b1a-f7b11f4f8e53"/>
+<img src="https://github.com/user-attachments/assets/f36b4ebc-2ba9-4393-a843-6379e48d962c"/>
+<img src="https://github.com/user-attachments/assets/5f0021e1-6209-40fb-bfe9-7f15ff74f0e4"/>
