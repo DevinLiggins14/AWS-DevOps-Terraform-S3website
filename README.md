@@ -139,33 +139,7 @@ resource "aws_s3_bucket_public_access_block" "example" {
 ```
 
 
-<br/> This command has the correct configurations:<br/>
 
-```Bash
-cat <<EOF >> main.tf
-
-# Configure ownership controls and make the bucket public
-resource "aws_s3_bucket_ownership_controls" "mybucket" {
-  bucket = aws_s3_bucket.mybucket.id
-
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "mybucket" {
-  bucket = aws_s3_bucket.mybucket.id
-
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
-}
-EOF
-# View the changes after the configurations
-terraform plan
-
-```
 
 
 
@@ -189,7 +163,12 @@ resource "aws_s3_bucket_acl" "example" {
 ```Bash
 cat <<EOF >> main.tf
 
-# Configure ownership controls and make the bucket public
+# Create S3 bucket
+resource "aws_s3_bucket" "mybucket" {
+  bucket = var.bucketname
+}
+
+# Configure ownership controls for mybucket
 resource "aws_s3_bucket_ownership_controls" "mybucket" {
   bucket = aws_s3_bucket.mybucket.id
 
@@ -198,6 +177,7 @@ resource "aws_s3_bucket_ownership_controls" "mybucket" {
   }
 }
 
+# Make mybucket public by adjusting public access block settings
 resource "aws_s3_bucket_public_access_block" "mybucket" {
   bucket = aws_s3_bucket.mybucket.id
 
@@ -207,7 +187,7 @@ resource "aws_s3_bucket_public_access_block" "mybucket" {
   restrict_public_buckets = false
 }
 
-# Add public-read ACL to the bucket
+# Apply public-read ACL to mybucket
 resource "aws_s3_bucket_acl" "mybucket" {
   depends_on = [
     aws_s3_bucket_ownership_controls.mybucket,
@@ -217,14 +197,21 @@ resource "aws_s3_bucket_acl" "mybucket" {
   bucket = aws_s3_bucket.mybucket.id
   acl    = "public-read"
 }
+
 EOF
+
+# Apporve and apply the changes
+terraform apply -auto-approve
+
 
 ```
 
+<br/> Confirm the bucket configurations in the console after applying the changes <br/>
+<img src="https://github.com/user-attachments/assets/e814168c-0d13-4024-aee1-97d0a194ec54"/>
+<img src="https://github.com/user-attachments/assets/f610938e-4790-4174-9568-41b3b892cea9"/>
 
-<img src=""/>
-
-
+<br/> Next we need to enable static website hosting because it is currently disabled <br/>
+<img src="https://github.com/user-attachments/assets/08027c5e-1375-4bea-8ca0-cc5df2618bff"/>
 
 ## Step 3: Upload Website Files
 
