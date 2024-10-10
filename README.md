@@ -107,7 +107,123 @@ terraform apply
 
 ## Step 2: Configure the Bucket for Static Website Hosting
 
-<br/> Navigate to [s3_bucket_ownership_controls](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) to find the following: <br/>
+<br/> Navigate to [s3 bucket ownership](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) as well as the [public access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) blocks and add and configure the example block so it can be added into the main.tf <br/>
+
+```Bash
+# aws_s3_bucket_ownership_controls example use
+resource "aws_s3_bucket" "example" {
+  bucket = "example"
+}
+
+resource "aws_s3_bucket_ownership_controls" "example" {
+  bucket = aws_s3_bucket.example.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+# aws_s3_bucket_public_access_block example use
+resource "aws_s3_bucket" "example" {
+  bucket = "example"
+}
+
+resource "aws_s3_bucket_public_access_block" "example" {
+  bucket = aws_s3_bucket.example.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+```
+
+
+<br/> This command has the correct configurations:<br/>
+
+```Bash
+cat <<EOF >> main.tf
+
+# Configure ownership controls and make the bucket public
+resource "aws_s3_bucket_ownership_controls" "mybucket" {
+  bucket = aws_s3_bucket.mybucket.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "mybucket" {
+  bucket = aws_s3_bucket.mybucket.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+EOF
+# View the changes after the configurations
+terraform plan
+
+```
+
+
+
+<br/> However we are not done, we need to apply [ACLs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) to our S3 bucket configuration as well  <br/>
+<br/> For this project we will use a PUBLIC-read configuration for testing only: <br/>
+```Bash
+# With public-read ACL
+resource "aws_s3_bucket_acl" "example" {
+  depends_on = [
+    aws_s3_bucket_ownership_controls.example,
+    aws_s3_bucket_public_access_block.example,
+  ]
+
+  bucket = aws_s3_bucket.example.id
+  acl    = "public-read"
+}
+```
+
+<br/> The complete configuration now looks like this: <br/>
+
+```Bash
+cat <<EOF >> main.tf
+
+# Configure ownership controls and make the bucket public
+resource "aws_s3_bucket_ownership_controls" "mybucket" {
+  bucket = aws_s3_bucket.mybucket.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "mybucket" {
+  bucket = aws_s3_bucket.mybucket.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+# Add public-read ACL to the bucket
+resource "aws_s3_bucket_acl" "mybucket" {
+  depends_on = [
+    aws_s3_bucket_ownership_controls.mybucket,
+    aws_s3_bucket_public_access_block.mybucket,
+  ]
+
+  bucket = aws_s3_bucket.mybucket.id
+  acl    = "public-read"
+}
+EOF
+
+```
+
+
+<img src=""/>
+
 
 
 ## Step 3: Upload Website Files
